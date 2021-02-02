@@ -6,6 +6,6 @@
 **/*.o
 **/*.a
 
-build/
+build*/
 
 tx_sdr

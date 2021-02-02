@@ -136,7 +136,7 @@ static int parse_len(char const **buf)
         exit(1);
     }
 
-    if (val < -0x80000000 && val >= 0x80000000 ) {
+    if (val < -0x80000000 || val >= 0x80000000 ) {
         fprintf(stderr, "out of range number argument (%f)\n", val);
         exit(1);
     }

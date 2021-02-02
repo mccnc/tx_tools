@@ -33,7 +33,7 @@
 #include "sdr/sdr.h"
 
 // helpers
-char const *tx_available_backends()
+char const *tx_available_backends(void)
 {
     return sdr_ctx_available_backends();
 }
@@ -209,6 +209,7 @@ void tx_cmd_free(tx_cmd_t *tx)
     //free(tx->antenna);
     //free(tx->output_format);
     //free(tx->input_format);
+    //free(tx->stream_buffer);
     //free(tx->preset);
     //free(tx->codes);
     //free(tx->pulses);

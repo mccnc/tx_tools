@@ -18,6 +18,13 @@ include_directories(${PROJECT_SOURCE_DIR}/src/utils)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 ########################################################################
+# Option to force ANSI-colored build output (for Ninja)
+########################################################################
+option(FORCE_COLORED_BUILD "Always produce ANSI-colored build output (GNU/Clang only)." FALSE)
+add_compile_options($<$<AND:$<BOOL:${FORCE_COLORED_BUILD}>,$<C_COMPILER_ID:GNU>>:-fdiagnostics-color=always>)
+add_compile_options($<$<AND:$<BOOL:${FORCE_COLORED_BUILD}>,$<C_COMPILER_ID:Clang,AppleClang>>:-fcolor-diagnostics>)
+
+########################################################################
 # Find SoapySDR
 ########################################################################
 find_package(SoapySDR "0.6" NO_MODULE)
@@ -165,6 +172,7 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     # make sure we don't accidentally copy more than an int
     ADD_DEFINITIONS(-Wlarge-by-value-copy=8)
     ADD_DEFINITIONS(-Weverything)
+    ADD_DEFINITIONS(-Wno-declaration-after-statement)
     ADD_DEFINITIONS(-Wno-documentation-unknown-command)
     ADD_DEFINITIONS(-Wno-documentation-deprecated-sync)
     ADD_DEFINITIONS(-Wno-documentation)

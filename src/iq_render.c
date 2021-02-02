@@ -172,7 +172,11 @@ static inline int64_t bound_s64(double x)
 
 static inline void signal_out_flush(ctx_t *ctx)
 {
-    write(ctx->fd, ctx->frame.u8, ctx->frame_len);
+    ssize_t r = write(ctx->fd, ctx->frame.u8, ctx->frame_len);
+    if (r != (ssize_t)ctx->frame_len) {
+        fprintf(stderr, "Failed to write output of %zu bytes (%zd).\n", ctx->frame_len, r);
+        exit(1);
+    }
     ctx->frame_pos = ctx->frame_len = 0;
 }
 

@@ -51,7 +51,7 @@
 
 #define DEFAULT_SAMPLE_RATE 2048000
 
-static void print_version()
+static void print_version(void)
 {
     fprintf(stderr,
             "tx_sdr -- an I/Q player for SDR devices.\n"
@@ -99,6 +99,7 @@ sighandler(int signum)
 #else
 static void sighandler(int signum)
 {
+    (void)signum;
     fprintf(stderr, "Signal caught, exiting!\n");
     *do_exit = 1;
 }
@@ -219,6 +220,8 @@ int main(int argc, char **argv)
         fprintf(stderr, "Unknown input format \"%s\", falling back to CU8.\n", ext);
         tx.input_format = tx_parse_sample_format("CU8");
     }
+
+    (void)verbose; // not used currently
 
     if (strcmp(filename, "-") == 0) { /* Read samples from stdin */
         tx.stream_fd = fileno(stdin);

@@ -36,7 +36,12 @@ char *read_text_fd(int fd, char const *file_hint)
     size_t n_offs = 0;
     ssize_t n_read = 1; // just to get us started
     while (n_read) {
-        text = realloc((void *)text, n_offs + READ_CHUNK_SIZE);
+        void *text_r = realloc((void *)text, n_offs + READ_CHUNK_SIZE);
+        if (!text_r) {
+            fprintf(stderr, "Error allocating memory\n");
+            exit(1);
+        }
+        text = text_r;
         n_read = read(fd, (void *)&text[n_offs], READ_CHUNK_SIZE);
         if (n_read < 0) {
             fprintf(stderr, "Error %d reading \"%s\".\n", (int)n_read, file_hint);

@@ -36,7 +36,7 @@ static int is_format_equal(const void *a, const void *b)
     return *(const uint32_t *)a == *(const uint32_t *)b;
 }
 
-char const *sdr_ctx_available_backends()
+char const *sdr_ctx_available_backends(void)
 {
     return ""
 #ifdef HAS_IIO
@@ -406,7 +406,7 @@ ssize_t sdr_input_try_read(sdr_ctx_t *sdr_ctx, sdr_cmd_t *tx, void *buf, size_t 
         }
         else if (fullScale < 32767.0) { // actually we expect 32768.0
             for (size_t i = 0; i < n_samps * 2; ++i) {
-                ((int16_t *)buf)[i] *= fullScale / 32768.0;
+                ((int16_t *)buf)[i] *= (int)(fullScale / 32768.0);
             }
         }
     }
