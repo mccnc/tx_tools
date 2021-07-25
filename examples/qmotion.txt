@@ -1,0 +1,47 @@
+# Signal generator definition
+#
+# The basic block is a "tone". A tone is defined by frequency, attenuation, and duration.
+# A tone is enclosed in parens "(freq att dur)".
+#
+# A frequency is given in Hz or kHz. Giving a frequency implies 0dB, giving no frequency implies -100dB.
+# The attenuation is given in dB, which is dBFS: 0dB is maximum level, -100dB is always assumed silence.
+# The duration is given in units of seconds (s), milliseconds (ms), or microseconds (us).
+#
+# A symbol is a named sequence of tones. A symbol is defined in brackets "[symb tones and symbols...]".
+#
+# If you define the 0 and 1 symbol you can also use hex in braces "{...}" for output.
+#
+# Whitespace is ignored, except to separate arguments. Whitespace is space, tab, newline, and linefeed
+# Comments begin with a hash sign "#", can start anywhere and run to end of the line.
+# All symbols are one char, 7-bit ASCII. You can not use parens, brackets, braces, dot, or minus as symbols "()[]{}.-".
+
+# 40 bit Manchester encoded data with CRC-8.
+# OOK at 433.92M, 0.6 kbps, i.e. 1666.666667 bit width, Half-bit width 833 us
+# Preamble of 64 bit 0xAA... (32 bit MC 0x00...) then 4050 us (5 half-bits?) silence
+# 12 repeats, 16.67 ms (10 bits) pause
+#
+# example data of 0xf0001862d6, i.e. Manchester coded and with preamble:
+# transmitted as {64}aaaaaaaaaaaaaaaa, {80}aa55555556956959a669
+
+[_ (4167us) ]               # define a long gap
+[0 (833us) ]                # define a space symbol as gap
+[1 (-20kHz 833us) ]         # define a mark symbol as pulse
+                            # 12 packets with a payload of 0x001862d6
+_ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+{HEX AAAAAAAAAAAAAAAA} _ {MC f0001862d6} _ _ _ _
+
+# To create a sample file use e.g.
+# code_gen -s 250k -r ../examples/qmotion.txt -w qmotion_433.92M_250k.cu8
+# To read and test a sample file use e.g.
+# rtl_433 -R 0 -X 'n=qmotion,m=OOK_MC_ZEROBIT,s=800,l=800,g=2000,r=6000' -r qmotion_433.92M_250k.cu8

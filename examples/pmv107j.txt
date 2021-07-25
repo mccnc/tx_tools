@@ -34,6 +34,6 @@ _ _
 _ _ _ _
 
 # To create a sample file use e.g.
-# code_gen -s 250k -r examples/pmv107j.txt pmv107j_315M_250k.cu8
+# code_gen -s 250k -r examples/pmv107j.txt -w pmv107j_315M_250k.cu8
 # To read and test a sample file use e.g.
 # rtl_433 -q -F json -R 0 -X 'pmv107j:FSK_PCM:100:100:250' -r pmv107j_315M_250k.cu8
