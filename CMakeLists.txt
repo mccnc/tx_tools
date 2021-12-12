@@ -196,6 +196,11 @@ if(UNIX)
 target_link_libraries(pulse_gen m)
 endif()
 
+add_executable(pulse_beep src/pulse_beep.c src/read_text.c src/tone_text.c src/transform.c src/utils/optparse.c src/iq_render.c src/sample.c)
+target_link_libraries(pulse_beep $<${UNIX}:m>)
+
+add_executable(sdr_mix src/sdr_mix.c src/utils/optparse.c)
+
 add_executable(code_gen src/code_gen.c src/read_text.c src/tone_text.c src/code_text.c src/transform.c src/utils/optparse.c src/iq_render.c src/sample.c)
 if(UNIX)
 target_link_libraries(code_gen m)
@@ -232,6 +237,8 @@ add_executable(byte-stat src/byte-stat.c)
 ########################################################################
 install(TARGETS tx_sdr DESTINATION bin)
 install(TARGETS pulse_gen DESTINATION bin)
+install(TARGETS pulse_beep DESTINATION bin)
+install(TARGETS sdr_mix DESTINATION bin)
 install(TARGETS code_gen DESTINATION bin)
 install(TARGETS code_dump DESTINATION bin)
 install(TARGETS example_gen DESTINATION bin)
